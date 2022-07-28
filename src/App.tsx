@@ -2,10 +2,23 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Table, Container, ListGroup } from "react-bootstrap";
 import { actionCreator } from "./store";
 import { State } from "./reducers";
 import { AiFillDelete } from "react-icons/ai";
+import { LoadingButton } from "@mui/lab";
+import {
+  Button,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Box,
+} from "@mui/material";
+
 const App: React.FC = () => {
   const dispatch = useDispatch();
   const data = useSelector((state: State) => state.fetchData);
@@ -24,80 +37,73 @@ const App: React.FC = () => {
     deleteById(id);
   };
   return (
-    <div>
-      <h3 className="text-center mb-5 mt-2">Table Of Hits</h3>
+    <Box>
+      <Typography variant="h2" align="center">
+        Table Of Hits
+      </Typography>
       <Container>
         {data.loading ? (
-          <div
-            className="text-center d-flex justify-content-center mx-auto spinner-grow"
-            role="status"
-          >
-            {/* <span className="sr-only">Loading...</span> */}
-          </div>
+          <LoadingButton />
         ) : (
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>sr no</th>
-                <th >title</th>
-                <th>url</th>
-                <th>author</th>
-                <th>created_at</th>
-                <th>_tags</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.data &&
-                data.data.map((data: any, i: number) => {
+          <TableContainer>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">sr no</TableCell>
+                  <TableCell align="center">Title</TableCell>
+                  <TableCell align="center">URL</TableCell>
+                  <TableCell align="center">Author</TableCell>
+                  <TableCell align="center">_tags</TableCell>
+                  <TableCell align="center">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.data.map((data: any, i: number) => {
                   const {
                     objectID,
                     title,
                     url,
                     author,
-                    created_at,
 
                     _tags,
                   } = data;
                   return (
-                    <tr key={objectID} className="py-4 ">
-                      <td>{++i}</td>
-                      <td className="">{title}</td>
-                      <td>
-                        <a href={url} className="text-decoration-none">
-                          {url ? url : "null"}
-                        </a>
-                      </td>
-                      <td>{author}</td>
-                      <td>{created_at}</td>
-
-                      <td>
-                        <ListGroup>
+                    <TableRow
+                      key={objectID}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell align="left">{++i}</TableCell>
+                      <TableCell align="left">{title}</TableCell>
+                      <TableCell>{url}</TableCell>
+                      <TableCell align="left">{author}</TableCell>
+                      <TableCell align="left">
+                        {_tags[0]}
+                        {/* <List>
                           {_tags.map((tag: string, i: number) => {
                             return (
-                              <ListGroup.Item variant="dark" key={i}>
-                                {tag}
-                              </ListGroup.Item>
+                              <ListItem disablePadding key={i}>
+                                <ListItemButton>
+                                  <ListItemText primary={_tags} />
+                                </ListItemButton>
+                              </ListItem>
                             );
                           })}
-                        </ListGroup>
-                      </td>
-                      <td >
-                        <button
-                          className="btn btn-danger d-flex justify-content-center align-items-center"
-                          onClick={() => handleDelete(objectID)}
-                        >
+                        </List> */}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button onClick={() => handleDelete(objectID)}>
                           <AiFillDelete style={{ fontSize: "40px" }} />
-                        </button>
-                      </td>
-                    </tr>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-            </tbody>
-          </Table>
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </Container>
-    </div>
+    </Box>
   );
 };
 
