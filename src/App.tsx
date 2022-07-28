@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Table, Container } from "react-bootstrap";
+import { Table, Container, ListGroup } from "react-bootstrap";
 import { actionCreator } from "./store";
 import { State } from "./reducers";
 import { AiFillDelete } from "react-icons/ai";
@@ -24,20 +24,25 @@ const App: React.FC = () => {
     deleteById(id);
   };
   return (
-    <div className="bg-primary m-0 p-0 ">
+    <div>
+      <h3 className="text-center mb-5 mt-2">Table Of Hits</h3>
       <Container>
         {data.loading ? (
-          <h3>Loading ...</h3>
+          <div
+            className="text-center d-flex justify-content-center mx-auto spinner-grow"
+            role="status"
+          >
+            {/* <span className="sr-only">Loading...</span> */}
+          </div>
         ) : (
-          <Table striped bordered variant="dark">
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>sr no</th>
-                <th className="w-50">title</th>
+                <th >title</th>
                 <th>url</th>
                 <th>author</th>
                 <th>created_at</th>
-
                 <th>_tags</th>
                 <th>Action</th>
               </tr>
@@ -57,28 +62,33 @@ const App: React.FC = () => {
                   return (
                     <tr key={objectID} className="py-4 ">
                       <td>{++i}</td>
-                      <td className="w-50">{title}</td>
+                      <td className="">{title}</td>
                       <td>
-                        <a href={url} className="text-white">
-                          {url}
+                        <a href={url} className="text-decoration-none">
+                          {url ? url : "null"}
                         </a>
                       </td>
                       <td>{author}</td>
                       <td>{created_at}</td>
 
                       <td>
-                        <ul>
+                        <ListGroup>
                           {_tags.map((tag: string, i: number) => {
-                            return <li key={i}>{tag}</li>;
+                            return (
+                              <ListGroup.Item variant="dark" key={i}>
+                                {tag}
+                              </ListGroup.Item>
+                            );
                           })}
-                        </ul>
+                        </ListGroup>
                       </td>
-                      <td>
-                        <AiFillDelete
-                          className="text-danger "
-                          style={{ fontSize: "20px" }}
+                      <td >
+                        <button
+                          className="btn btn-danger d-flex justify-content-center align-items-center"
                           onClick={() => handleDelete(objectID)}
-                        />
+                        >
+                          <AiFillDelete style={{ fontSize: "40px" }} />
+                        </button>
                       </td>
                     </tr>
                   );
